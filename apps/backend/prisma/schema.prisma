@@ -1,6 +1,6 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 generator client {
@@ -13,7 +13,7 @@ model Student {
   name            String
   email           String   @unique
   phone           String?
-  skills          String[]
+  skills          String   // Comma separated
   resumeUrl       String?
   availability    String?
   placementStatus String   @default("AVAILABLE") // AVAILABLE, PLACED, IN_PROCESS
@@ -48,7 +48,7 @@ model Job {
   id             String   @id @default(uuid())
   title          String
   description    String
-  requirements   String[]
+  requirements   String   // Comma separated
   location       String?
   salaryRange    String?
   company        Company  @relation(fields: [companyId], references: [id])
