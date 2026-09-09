@@ -1,0 +1,30 @@
+node_modules/
+dist/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Next.js
+.next/
+out/
+build/
+
+# IDEs and OS
+.vscode/
+.idea/
+.DS_Store
+*.pem
+
+# NestJS
+npm-debug.log
+yarn-error.log
+
+# Prisma
+/prisma/data.db
+/prisma/data.db-journal
+
+# Logs
+logs
+*.log

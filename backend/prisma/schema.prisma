@@ -1,0 +1,80 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Student {
+  id              String   @id @default(uuid())
+  techwellId      String?  @unique
+  name            String
+  email           String   @unique
+  phone           String?
+  skills          String[]
+  resumeUrl       String?
+  availability    String?
+  placementStatus String   @default("AVAILABLE") // AVAILABLE, PLACED, IN_PROCESS
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  applications    Application[]
+}
+
+model Company {
+  id          String   @id @default(uuid())
+  name        String
+  website     String?
+  industry    String?
+  recruiters  Recruiter[]
+  jobs        Job[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Recruiter {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  phone     String?
+  company   Company  @relation(fields: [companyId], references: [id])
+  companyId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Job {
+  id             String   @id @default(uuid())
+  title          String
+  description    String
+  requirements   String[]
+  location       String?
+  salaryRange    String?
+  company        Company  @relation(fields: [companyId], references: [id])
+  companyId      String
+  status         String   @default("OPEN") // OPEN, CLOSED
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  applications   Application[]
+}
+
+model Application {
+  id          String   @id @default(uuid())
+  student     Student  @relation(fields: [studentId], references: [id])
+  studentId   String
+  job         Job      @relation(fields: [jobId], references: [id])
+  jobId       String
+  status      String   @default("SUBMITTED") // SUBMITTED, SHORTLISTED, INTERVIEW, OFFER, JOINED, REJECTED
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Staff {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  role      String   @default("STAFF") // ADMIN, STAFF, TRAINER, MANAGEMENT
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
